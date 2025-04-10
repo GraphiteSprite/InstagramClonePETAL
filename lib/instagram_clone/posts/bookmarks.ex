@@ -7,5 +7,4 @@ defmodule InstagramClone.Posts.Bookmarks do
 
     timestamps()
   end
-
 end

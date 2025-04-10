@@ -13,14 +13,13 @@ defmodule InstagramCloneWeb.PostLive.Show do
     post = Posts.get_post_by_url!(URI.decode(id))
 
     {:ok,
-      socket
-      |> assign(changeset: Comments.change_comment(%Comment{}))
-      |> assign(comments_section_update: "prepend")
-      |> assign(post: post)
-      |> assign(page: 1, per_page: 15)
-      |> assign_comments()
-      |> set_load_more_comments_btn(),
-      temporary_assigns: [comments: []]}
+     socket
+     |> assign(changeset: Comments.change_comment(%Comment{}))
+     |> assign(comments_section_update: "prepend")
+     |> assign(post: post)
+     |> assign(page: 1, per_page: 15)
+     |> assign_comments()
+     |> set_load_more_comments_btn(), temporary_assigns: [comments: []]}
   end
 
   defp assign_comments(socket) do
@@ -49,24 +48,25 @@ defmodule InstagramCloneWeb.PostLive.Show do
   @impl true
   def handle_info({LikeComponent, :update_comment_likes, comment}, socket) do
     comment = Comments.get_comment!(comment.id)
+
     {:noreply,
-      socket
-      |> update(:comments, fn comments -> [comment | comments] end)}
+     socket
+     |> update(:comments, fn comments -> [comment | comments] end)}
   end
 
   @impl true
   def handle_info({LikeComponent, :update_post_likes, post}, socket) do
     {:noreply,
-      socket
-      |> assign(post: Posts.get_post!(post.id))}
+     socket
+     |> assign(post: Posts.get_post!(post.id))}
   end
 
   @impl true
   def handle_event("load-more-comments", _, socket) do
     {:noreply,
-      socket
-      |> assign(comments_section_update: "append")
-      |> load_comments()}
+     socket
+     |> assign(comments_section_update: "append")
+     |> load_comments()}
   end
 
   @impl true
@@ -79,11 +79,12 @@ defmodule InstagramCloneWeb.PostLive.Show do
       {:noreply, socket}
     else
       comment = Comments.create_comment(current_user, post, comment_param)
+
       {:noreply,
-        socket
-        |> update(:comments, fn comments -> [comment | comments] end)
-        |> assign(comments_section_update: "prepend")
-        |> assign(changeset: Comments.change_comment(%Comment{}))}
+       socket
+       |> update(:comments, fn comments -> [comment | comments] end)
+       |> assign(comments_section_update: "prepend")
+       |> assign(changeset: Comments.change_comment(%Comment{}))}
     end
   end
 
@@ -100,7 +101,7 @@ defmodule InstagramCloneWeb.PostLive.Show do
   end
 
   defp hide_btn?(socket, page, total_pages) do
-    if (page + 1) == total_pages do
+    if page + 1 == total_pages do
       socket |> assign(load_more_comments_btn: "hidden")
     else
       socket

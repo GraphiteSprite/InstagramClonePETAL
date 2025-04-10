@@ -37,6 +37,7 @@ defmodule InstagramCloneWeb.UserLive.FollowComponent do
     user = socket.assigns.user
 
     :timer.sleep(300)
+
     if Accounts.following?(current_user.id, user.id) do
       unfollow(socket, current_user.id, user.id)
     else
@@ -54,30 +55,31 @@ defmodule InstagramCloneWeb.UserLive.FollowComponent do
 
   defp get_socket_assigns(socket, assigns, btn_name, btn_styles) do
     {:ok,
-      socket
-      |> assign(assigns)
-      |> assign(follow_btn_name: btn_name)
-      |> assign(follow_btn_styles: btn_styles)}
+     socket
+     |> assign(assigns)
+     |> assign(follow_btn_name: btn_name)
+     |> assign(follow_btn_styles: btn_styles)}
   end
 
   defp follow(socket, current_user, user) do
     updated_user = Accounts.create_follow(current_user, user, current_user)
     # Message sent to the parent liveview to update totals
     send(self(), {__MODULE__, :update_totals, updated_user})
+
     {:noreply,
-      socket
-      |> assign(follow_btn_name: "Unfollow")
-      |> assign(follow_btn_styles: "user-profile-unfollow-btn")}
+     socket
+     |> assign(follow_btn_name: "Unfollow")
+     |> assign(follow_btn_styles: "user-profile-unfollow-btn")}
   end
 
   defp unfollow(socket, current_user_id, user_id) do
     updated_user = Accounts.unfollow(current_user_id, user_id)
     # Message sent to the parent liveview to update totals
     send(self(), {__MODULE__, :update_totals, updated_user})
-    {:noreply,
-      socket
-      |> assign(follow_btn_name: "Follow")
-      |> assign(follow_btn_styles: "user-profile-follow-btn")}
-  end
 
+    {:noreply,
+     socket
+     |> assign(follow_btn_name: "Follow")
+     |> assign(follow_btn_styles: "user-profile-follow-btn")}
+  end
 end

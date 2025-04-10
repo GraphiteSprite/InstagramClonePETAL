@@ -5,9 +5,9 @@ defmodule InstagramClone.MixProject do
     [
       app: :instagram_clone,
       version: "0.1.0",
-      elixir: "~> 1.7",
+
+      elixir: "~> 1.14",
       elixirc_paths: elixirc_paths(Mix.env()),
-      compilers: [:phoenix, :gettext] ++ Mix.compilers(),
       start_permanent: Mix.env() == :prod,
       aliases: aliases(),
       deps: deps()
@@ -33,25 +33,34 @@ defmodule InstagramClone.MixProject do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:bcrypt_elixir, "~> 2.0"},
-      {:phoenix, "~> 1.5.6"},
-      {:phoenix_ecto, "~> 4.1"},
-      {:ecto_sql, "~> 3.4"},
+      {:phoenix, "~> 1.7.0"},
+      {:phoenix_ecto, "~> 4.4"},
+      {:ecto_sql, "~> 3.10"},
+      {:phoenix_html, "~> 3.3"},
+      {:phoenix_live_view, "~> 0.20.0"},
+      {:phoenix_live_reload, "~> 1.4", only: :dev},
+      {:phoenix_live_dashboard, "~> 0.8.0"},
+      {:telemetry_metrics, "~> 0.6"},
+      {:telemetry_poller, "~> 1.0"},
+      # Updated version
+      {:bcrypt_elixir, "~> 3.0"},
       {:postgrex, ">= 0.0.0"},
-      {:floki, ">= 0.27.0", only: :test},
-      {:phoenix_html, "~> 2.11"},
-      {:phoenix_live_reload, "~> 1.2", only: :dev},
-      {:phoenix_live_dashboard, "~> 0.3 or ~> 0.2.9"},
-      {:telemetry_metrics, "~> 0.4"},
-      {:telemetry_poller, "~> 0.4"},
-      {:gettext, "~> 0.11"},
-      {:jason, "~> 1.0"},
-      {:plug_cowboy, "~> 2.0"},
-      {:phoenix_live_view, "~> 0.15.4", override: true},
-      {:timex, "~> 3.6"},
-      {:faker, "~> 0.16.0"},
-      {:phx_gen_auth, "~> 0.7", only: [:dev], runtime: false},
-      {:mogrify, "~> 0.8.0"}
+      # Updated version
+      {:floki, ">= 0.30.0", only: :test},
+      # Updated version
+      {:gettext, "~> 0.20"},
+      # Updated version
+      {:jason, "~> 1.4"},
+      # Updated version
+      {:plug_cowboy, "~> 2.6"},
+      # Updated version
+      {:timex, "~> 3.7"},
+      # Updated version
+      {:faker, "~> 0.17"},
+      # Updated version
+      {:mogrify, "~> 0.9.0"},
+      {:petal_components, "~> 1.2"},
+      {:heroicons, "~> 0.5.3"}
     ]
   end
 

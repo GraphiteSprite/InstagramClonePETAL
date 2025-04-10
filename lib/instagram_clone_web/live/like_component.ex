@@ -39,8 +39,8 @@ defmodule InstagramCloneWeb.Live.LikeComponent do
     send_msg(liked)
 
     {:noreply,
-      socket
-      |> assign(icon: unlike_icon(socket.assigns))}
+     socket
+     |> assign(icon: unlike_icon(socket.assigns))}
   end
 
   defp unlike(socket, current_user_id, liked) do
@@ -48,8 +48,8 @@ defmodule InstagramCloneWeb.Live.LikeComponent do
     send_msg(liked)
 
     {:noreply,
-      socket
-      |> assign(icon: like_icon(socket.assigns))}
+     socket
+     |> assign(icon: like_icon(socket.assigns))}
   end
 
   defp send_msg(liked) do
@@ -67,9 +67,9 @@ defmodule InstagramCloneWeb.Live.LikeComponent do
 
   defp get_socket_assigns(socket, assigns, icon) do
     {:ok,
-      socket
-      |> assign(assigns)
-      |> assign(icon: icon)}
+     socket
+     |> assign(assigns)
+     |> assign(icon: icon)}
   end
 
   defp get_struct_name(struct) do
@@ -100,5 +100,4 @@ defmodule InstagramCloneWeb.Live.LikeComponent do
     </svg>
     """
   end
-
 end

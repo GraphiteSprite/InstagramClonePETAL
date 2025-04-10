@@ -10,32 +10,34 @@ defmodule InstagramCloneWeb.UserLive.Profile do
     user = Accounts.profile(username)
 
     {:ok,
-      socket
-      |> assign(page: 1, per_page: 15)
-      |> assign(user: user)
-      |> assign(page_title: "#{user.full_name} (@#{user.username})"),
-      temporary_assigns: [posts: []]}
+     socket
+     |> assign(page: 1, per_page: 15)
+     |> assign(user: user)
+     |> assign(page_title: "#{user.full_name} (@#{user.username})"),
+     temporary_assigns: [posts: []]}
   end
 
   defp assign_posts(socket) do
     socket
-    |> assign(posts:
-      Posts.list_profile_posts(
-        page: socket.assigns.page,
-        per_page: socket.assigns.per_page,
-        user_id: socket.assigns.user.id
-      )
+    |> assign(
+      posts:
+        Posts.list_profile_posts(
+          page: socket.assigns.page,
+          per_page: socket.assigns.per_page,
+          user_id: socket.assigns.user.id
+        )
     )
   end
 
   defp assign_saved_posts(socket) do
     socket
-    |> assign(posts:
-      Posts.list_saved_profile_posts(
-        page: socket.assigns.page,
-        per_page: socket.assigns.per_page,
-        user_id: socket.assigns.user.id
-      )
+    |> assign(
+      posts:
+        Posts.list_saved_profile_posts(
+          page: socket.assigns.page,
+          per_page: socket.assigns.per_page,
+          user_id: socket.assigns.user.id
+        )
     )
   end
 
@@ -145,5 +147,4 @@ defmodule InstagramCloneWeb.UserLive.Profile do
       true -> :login_btn
     end
   end
-
 end

@@ -11,5 +11,4 @@ defmodule InstagramClone.Notifications.Notification do
 
     timestamps()
   end
-
 end

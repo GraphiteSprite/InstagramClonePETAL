@@ -30,7 +30,7 @@ defmodule InstagramClone.DataCase do
   setup tags do
     :ok = Ecto.Adapters.SQL.Sandbox.checkout(InstagramClone.Repo)
 
-    unless tags[:async] do
+    if !tags[:async] do
       Ecto.Adapters.SQL.Sandbox.mode(InstagramClone.Repo, {:shared, self()})
     end
 

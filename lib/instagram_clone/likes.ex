@@ -46,7 +46,7 @@ defmodule InstagramClone.Likes do
 
   # Returns nil if not found
   def liked?(user_id, liked_id) do
-    Repo.get_by(Like, [user_id: user_id, liked_id: liked_id])
+    Repo.get_by(Like, user_id: user_id, liked_id: liked_id)
   end
 
   defp get_built_notification(user, liked, :post) do
@@ -81,9 +81,9 @@ defmodule InstagramClone.Likes do
     liked.__struct__
     |> to_string()
     |> String.split(".")
-    |> List.last
-    |> String.downcase
-    |> String.to_atom
+    |> List.last()
+    |> String.downcase()
+    |> String.to_atom()
   end
 
   defp notify_user do

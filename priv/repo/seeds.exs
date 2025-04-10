@@ -20,17 +20,16 @@ alias InstagramClone.Likes.Like
 alias InstagramClone.Comments
 alias InstagramClone.Comments.Comment
 
-
 # Deletes all users
 Repo.delete_all(User)
 # Creates users
 for n <- 1..40 do
   generate_full_name =
-    Faker.Person.name
+    Faker.Person.name()
     |> String.replace([".", "'"], "", global: true)
 
   generate_username =
-    Faker.Person.name
+    Faker.Person.name()
     |> String.replace([".", "'", " "], "", global: true)
 
   attrs = %{
@@ -51,7 +50,7 @@ end
 users = Repo.all(User)
 
 # Gets random users to be followers
-rand_followers = fn (user) ->
+rand_followers = fn user ->
   limit_n = Enum.random(5..15)
 
   User
@@ -87,10 +86,10 @@ for user <- users do
 end
 
 # Gets all posts
-posts = Posts.list_posts
+posts = Posts.list_posts()
 
 # Gets random users to given number range to be likers or commenters
-rand_users = fn (range) ->
+rand_users = fn range ->
   limit_n = Enum.random(range)
 
   User

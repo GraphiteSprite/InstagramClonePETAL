@@ -58,5 +58,4 @@ defmodule InstagramClone.Uploaders.Avatar do
       _image -> {:ok, dst_path}
     end
   end
-
 end

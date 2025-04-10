@@ -6,8 +6,16 @@ defmodule InstagramClone.PostsTest do
   describe "posts" do
     alias InstagramClone.Posts.Post
 
-    @valid_attrs %{description: "some description", photo_url: "some photo_url", url_id: "some url_id"}
-    @update_attrs %{description: "some updated description", photo_url: "some updated photo_url", url_id: "some updated url_id"}
+    @valid_attrs %{
+      description: "some description",
+      photo_url: "some photo_url",
+      url_id: "some url_id"
+    }
+    @update_attrs %{
+      description: "some updated description",
+      photo_url: "some updated photo_url",
+      url_id: "some updated url_id"
+    }
     @invalid_attrs %{description: nil, photo_url: nil, url_id: nil}
 
     def post_fixture(attrs \\ %{}) do

@@ -39,16 +39,16 @@ defmodule InstagramCloneWeb.PostLive.BookmarkComponent do
     Posts.unbookmark(bookmarked?)
 
     {:noreply,
-      socket
-      |> assign(icon: bookmark_icon(socket.assigns))}
+     socket
+     |> assign(icon: bookmark_icon(socket.assigns))}
   end
 
   defp bookmark(socket, current_user, post) do
     Posts.create_bookmark(current_user, post)
 
     {:noreply,
-      socket
-      |> assign(icon: bookmarked_icon(socket.assigns))}
+     socket
+     |> assign(icon: bookmarked_icon(socket.assigns))}
   end
 
   defp get_btn_status(socket, assigns) do
@@ -61,9 +61,9 @@ defmodule InstagramCloneWeb.PostLive.BookmarkComponent do
 
   defp get_socket_assigns(socket, assigns, icon) do
     {:ok,
-      socket
-      |> assign(assigns)
-      |> assign(icon: icon)}
+     socket
+     |> assign(assigns)
+     |> assign(icon: icon)}
   end
 
   defp bookmark_icon(assigns) do
@@ -81,5 +81,4 @@ defmodule InstagramCloneWeb.PostLive.BookmarkComponent do
     </svg>
     """
   end
-
 end

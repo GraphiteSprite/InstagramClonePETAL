@@ -33,10 +33,10 @@ defmodule InstagramClone.Notifications do
   def list_user_notifications(user_id) do
     Notification
     |> where(user_id: ^user_id)
-    |> where([n], n.inserted_at >= datetime_add(^NaiveDateTime.utc_now(), -1, "week") )
+    |> where([n], n.inserted_at >= datetime_add(^NaiveDateTime.utc_now(), -1, "week"))
     |> order_by(desc: :id)
     |> preload(:actor)
-    |> Repo.all
+    |> Repo.all()
   end
 
   @doc """
@@ -70,6 +70,7 @@ defmodule InstagramClone.Notifications do
         action: @actions.post_action,
         user_id: post.user_id
       )
+
     notification = Ecto.build_assoc(post, :notifications, actor)
 
     notification
@@ -84,6 +85,7 @@ defmodule InstagramClone.Notifications do
         user_id: post.user_id,
         post_id: post.id
       )
+
     notification = Ecto.build_assoc(comment, :notifications, actor)
 
     Repo.insert(notification)
@@ -92,6 +94,7 @@ defmodule InstagramClone.Notifications do
   def build_comment_like_notification(actor: actor, comment: comment) do
     preload_post = Repo.preload(comment, :post)
     post = preload_post.post
+
     actor =
       Ecto.build_assoc(
         actor,
@@ -100,6 +103,7 @@ defmodule InstagramClone.Notifications do
         user_id: comment.user_id,
         post_id: post.id
       )
+
     notification = Ecto.build_assoc(comment, :notifications, actor)
 
     notification
@@ -130,6 +134,7 @@ defmodule InstagramClone.Notifications do
   def get_comment_like_notification(actor_id: actor_id, comment: comment) do
     preload_post = Repo.preload(comment, :post)
     post = preload_post.post
+
     notification =
       Repo.get_by!(
         Notification,
@@ -153,7 +158,7 @@ defmodule InstagramClone.Notifications do
     Notification
     |> where(user_id: ^user_id)
     |> where(read: false)
-    |> Repo.exists?
+    |> Repo.exists?()
   end
 
   def set_preload(notification, :post_like) do
@@ -176,6 +181,7 @@ defmodule InstagramClone.Notifications do
     post_query =
       Post
       |> select([p], %{url_id: p.url_id, photo_url: p.photo_url})
+
     comment_query =
       Comment
       |> select([c], %{body: c.body})
@@ -198,5 +204,4 @@ defmodule InstagramClone.Notifications do
   def delete_notification(%Notification{} = notification) do
     Repo.delete(notification)
   end
-
 end

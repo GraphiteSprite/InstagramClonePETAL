@@ -10,10 +10,10 @@ defmodule InstagramCloneWeb.NotificationsComponent do
     action_atom = String.to_atom(notification_action)
 
     {:ok,
-      socket
-      |> assign(assigns)
-      |> assign_notification(action_atom)
-      |> assign(action_atom: action_atom)}
+     socket
+     |> assign(assigns)
+     |> assign_notification(action_atom)
+     |> assign(action_atom: action_atom)}
   end
 
   @impl true

@@ -1,7 +1,10 @@
 defmodule InstagramCloneWeb.RenderHelpers do
+  use InstagramCloneWeb, :component
+  import Phoenix.LiveView
+  import Phoenix.LiveView.Components
   import Phoenix.LiveView.Helpers
 
-      @doc """
+  @doc """
   Renders a component inside the `LiveviewPlaygroundWeb.ModalComponent` component.
 
   The rendered modal receives a `:return_to` option to properly update
@@ -32,10 +35,11 @@ defmodule InstagramCloneWeb.RenderHelpers do
   end
 
   def display_website_uri(website) do
-    website = website
-    |> String.replace_leading("https://", "")
-    |> String.replace_leading("http://", "")
+    website =
+      website
+      |> String.replace_leading("https://", "")
+      |> String.replace_leading("http://", "")
+
     website
   end
-
 end

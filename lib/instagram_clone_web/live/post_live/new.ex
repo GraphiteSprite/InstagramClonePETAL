@@ -12,12 +12,13 @@ defmodule InstagramCloneWeb.PostLive.New do
     socket = assign_defaults(session, socket)
 
     {:ok,
-      socket
-      |> assign(page_title: "New Post")
-      |> assign(changeset: Posts.change_post(%Post{}))
-      |> allow_upload(:photo_url,
-      accept: @extension_whitelist,
-      max_file_size: 30_000_000)}
+     socket
+     |> assign(page_title: "New Post")
+     |> assign(changeset: Posts.change_post(%Post{}))
+     |> allow_upload(:photo_url,
+       accept: @extension_whitelist,
+       max_file_size: 30_000_000
+     )}
   end
 
   @impl true
@@ -41,7 +42,9 @@ defmodule InstagramCloneWeb.PostLive.New do
         {:noreply,
          socket
          |> put_flash(:info, "Post created successfully")
-         |> push_redirect(to: Routes.live_path(socket, InstagramCloneWeb.PostLive.Show, post.url_id))}
+         |> push_redirect(
+           to: Routes.live_path(socket, InstagramCloneWeb.PostLive.Show, post.url_id)
+         )}
 
       {:error, :post, %Ecto.Changeset{} = changeset, %{}} ->
         {:noreply, assign(socket, changeset: changeset)}
@@ -56,7 +59,7 @@ defmodule InstagramCloneWeb.PostLive.New do
     # Broadcast to that new post was added
     InstagramCloneWeb.Endpoint.broadcast_from(
       self(),
-      Posts.pubsub_topic,
+      Posts.pubsub_topic(),
       "new_post",
       %{
         post: post

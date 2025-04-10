@@ -1,55 +1,37 @@
 defmodule InstagramCloneWeb do
   @moduledoc """
-  The entrypoint for defining your web interface, such
-  as controllers, views, channels and so on.
-
-  This can be used in your application as:
-
-      use InstagramCloneWeb, :controller
-      use InstagramCloneWeb, :view
-
-  The definitions below will be executed for every view,
-  controller, etc, so keep them short and clean, focused
-  on imports, uses and aliases.
-
-  Do NOT define functions inside the quoted expressions
-  below. Instead, define any helper function in modules
-  and import those modules here.
+  The entrypoint for defining your web interface.
   """
+
+  def static_paths, do: ~w(assets fonts images favicon.ico robots.txt)
 
   def controller do
     quote do
-      use Phoenix.Controller, namespace: InstagramCloneWeb
-
+      use Phoenix.Controller,
+        formats: [:html, :json],
+        layouts: [html: InstagramCloneWeb.Layouts]
+      
       import Plug.Conn
       import InstagramCloneWeb.Gettext
-      alias InstagramCloneWeb.Router.Helpers, as: Routes
+      
+      unquote(verified_routes())
     end
   end
 
-  def view do
+  def component do
     quote do
-      use Phoenix.View,
-        root: "lib/instagram_clone_web/templates",
-        namespace: InstagramCloneWeb
+      use Phoenix.Component
 
-      # Import convenience functions from controllers
-      import Phoenix.Controller,
-        only: [get_flash: 1, get_flash: 2, view_module: 1, view_template: 1]
-
-      # Include shared imports and aliases for views
-      unquote(view_helpers())
+      unquote(html_helpers())
     end
   end
 
   def live_view do
     quote do
       use Phoenix.LiveView,
-        layout: {InstagramCloneWeb.LayoutView, "live.html"}
-
-      unquote(view_helpers())
-      use InstagramCloneWeb.LiveHelpers
-
+        layout: {InstagramCloneWeb.Layouts, :app}
+      
+      unquote(html_helpers())
     end
   end
 
@@ -57,14 +39,13 @@ defmodule InstagramCloneWeb do
     quote do
       use Phoenix.LiveComponent
 
-      unquote(view_helpers())
+      unquote(html_helpers())
     end
   end
 
   def router do
     quote do
-      use Phoenix.Router
-
+      use Phoenix.Router, helpers: false
       import Plug.Conn
       import Phoenix.Controller
       import Phoenix.LiveView.Router
@@ -78,21 +59,51 @@ defmodule InstagramCloneWeb do
     end
   end
 
-  defp view_helpers do
+  def html do
     quote do
-      # Use all HTML functionality (forms, tags, etc)
-      use Phoenix.HTML
-
-      # Import LiveView helpers (live_render, live_component, live_patch, etc)
+      use Phoenix.Component
+      import PetalComponents
+      
+      # Import convenience functions for HTML
+      import Phoenix.HTML
       import Phoenix.LiveView.Helpers
-
-      # Import basic rendering functionality (render, render_layout, etc)
-      import Phoenix.View
-
-      import InstagramCloneWeb.ErrorHelpers
+      
+      # Import core UI components
+      import InstagramCloneWeb.CoreComponents
+      
+      # Import custom helpers
       import InstagramCloneWeb.Gettext
-      import InstagramCloneWeb.RenderHelpers
-      alias InstagramCloneWeb.Router.Helpers, as: Routes
+      
+      # Shortcut for generating JS commands
+      alias Phoenix.LiveView.JS
+      
+      # Routes generation
+      unquote(verified_routes())
+    end
+  end
+
+  defp html_helpers do
+    quote do
+      # HTML escaping functionality
+      import Phoenix.HTML
+      # Core UI components and translation
+      import InstagramCloneWeb.CoreComponents
+      import InstagramCloneWeb.Gettext
+
+      # Shortcut for generating JS commands
+      alias Phoenix.LiveView.JS
+
+      # Routes generation with the ~p sigil
+      unquote(verified_routes())
+    end
+  end
+
+  def verified_routes do
+    quote do
+      use Phoenix.VerifiedRoutes,
+        endpoint: InstagramCloneWeb.Endpoint,
+        router: InstagramCloneWeb.Router,
+        statics: InstagramCloneWeb.static_paths()
     end
   end
 

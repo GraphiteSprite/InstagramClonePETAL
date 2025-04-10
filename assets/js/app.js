@@ -17,6 +17,7 @@ import {Socket} from "phoenix"
 import NProgress from "nprogress"
 import {LiveSocket} from "phoenix_live_view"
 import Alpine from "alpinejs"
+import "petal_components"
 
 let Hooks = {}
 

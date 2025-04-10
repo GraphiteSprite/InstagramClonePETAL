@@ -19,6 +19,7 @@ defmodule InstagramClone.Posts do
   def subscribe do
     InstagramCloneWeb.Endpoint.subscribe(@pubsub_topic)
   end
+
   @doc """
   Returns the list of posts.
 
@@ -48,7 +49,7 @@ defmodule InstagramClone.Posts do
     |> limit(^per_page)
     |> offset(^((page - 1) * per_page))
     |> order_by(desc: :id)
-    |> Repo.all
+    |> Repo.all()
   end
 
   def list_saved_profile_posts(page: page, per_page: per_page, user_id: user_id) do
@@ -59,8 +60,9 @@ defmodule InstagramClone.Posts do
     |> limit(^per_page)
     |> offset(^((page - 1) * per_page))
     |> order_by(desc: :id)
-    |> Repo.all
+    |> Repo.all()
   end
+
   @doc """
   Returns the list of paginated posts of a given user id
   And posts of following list of given user id
@@ -78,14 +80,17 @@ defmodule InstagramClone.Posts do
     user = assigns.current_user
     page = assigns.page
     per_page = assigns.per_page
+
     query =
       from c in Comment,
-      select: %{id: c.id, row_number: over(row_number(), :posts_partition)},
-      windows: [posts_partition: [partition_by: :post_id, order_by: [desc: :id]]]
+        select: %{id: c.id, row_number: over(row_number(), :posts_partition)},
+        windows: [posts_partition: [partition_by: :post_id, order_by: [desc: :id]]]
+
     comments_query =
       from c in Comment,
-      join: r in subquery(query),
-      on: c.id == r.id and r.row_number <= 2
+        join: r in subquery(query),
+        on: c.id == r.id and r.row_number <= 2
+
     likes_query = Like |> select([l], l.user_id)
     bookmarks_query = Bookmarks |> select([b], b.user_id)
 
@@ -95,7 +100,12 @@ defmodule InstagramClone.Posts do
     |> limit(^per_page)
     |> offset(^((page - 1) * per_page))
     |> order_by(desc: :id)
-    |> preload([:user, posts_bookmarks: ^bookmarks_query, likes: ^likes_query, comments: ^{comments_query, [:user, likes: likes_query]}])
+    |> preload([
+      :user,
+      posts_bookmarks: ^bookmarks_query,
+      likes: ^likes_query,
+      comments: ^{comments_query, [:user, likes: likes_query]}
+    ])
     |> Repo.all()
   end
 
@@ -134,17 +144,24 @@ defmodule InstagramClone.Posts do
   def get_post_feed!(id) do
     query =
       from c in Comment,
-      select: %{id: c.id, row_number: over(row_number(), :posts_partition)},
-      windows: [posts_partition: [partition_by: :post_id, order_by: [desc: :id]]]
+        select: %{id: c.id, row_number: over(row_number(), :posts_partition)},
+        windows: [posts_partition: [partition_by: :post_id, order_by: [desc: :id]]]
+
     comments_query =
       from c in Comment,
-      join: r in subquery(query),
-      on: c.id == r.id and r.row_number <= 2
+        join: r in subquery(query),
+        on: c.id == r.id and r.row_number <= 2
+
     likes_query = Like |> select([l], l.user_id)
     bookmarks_query = Bookmarks |> select([b], b.user_id)
 
     Post
-    |> preload([:user, posts_bookmarks: ^bookmarks_query, likes: ^likes_query, comments: ^{comments_query, [:user, likes: likes_query]}])
+    |> preload([
+      :user,
+      posts_bookmarks: ^bookmarks_query,
+      likes: ^likes_query,
+      comments: ^{comments_query, [:user, likes: likes_query]}
+    ])
     |> Repo.get!(id)
   end
 
@@ -235,7 +252,7 @@ defmodule InstagramClone.Posts do
 
   # Returns nil if not found
   def bookmarked?(user_id, post_id) do
-    Repo.get_by(Bookmarks, [user_id: user_id, post_id: post_id])
+    Repo.get_by(Bookmarks, user_id: user_id, post_id: post_id)
   end
 
   def create_bookmark(user, post) do
@@ -253,6 +270,6 @@ defmodule InstagramClone.Posts do
     Bookmarks
     |> where(user_id: ^user.id)
     |> select([b], count(b.id))
-    |> Repo.one
+    |> Repo.one()
   end
 end

@@ -1,5 +1,6 @@
 defmodule InstagramCloneWeb.LiveHelpers do
   import Phoenix.LiveView
+  import Phoenix.Component
   alias InstagramClone.Accounts
   alias InstagramClone.Accounts.User
   alias InstagramCloneWeb.UserAuth
@@ -27,9 +28,9 @@ defmodule InstagramCloneWeb.LiveHelpers do
       def handle_info(%{event: "logout_user", payload: %{user: %User{id: id}}}, socket) do
         with %User{id: ^id} <- socket.assigns.current_user do
           {:noreply,
-            socket
-            |> redirect(to: "/")
-            |> put_flash(:info, "Logged out successfully.")}
+           socket
+           |> redirect(to: "/")
+           |> put_flash(:info, "Logged out successfully.")}
         else
           _any -> {:noreply, socket}
         end
@@ -86,7 +87,10 @@ defmodule InstagramCloneWeb.LiveHelpers do
       end
 
       @impl true
-      def handle_info({InstagramCloneWeb.HeaderNavComponent, :get_notifications, unread_notifications?}, socket) do
+      def handle_info(
+            {InstagramCloneWeb.HeaderNavComponent, :get_notifications, unread_notifications?},
+            socket
+          ) do
         case Notifications.list_user_notifications(socket.assigns.current_user.id) do
           [] ->
             send_update(InstagramCloneWeb.HeaderNavComponent,
@@ -127,6 +131,7 @@ defmodule InstagramCloneWeb.LiveHelpers do
       assign_new(socket, :current_user, fn ->
         find_current_user(session)
       end)
+
     socket
   end
 
@@ -135,5 +140,4 @@ defmodule InstagramCloneWeb.LiveHelpers do
          %User{} = user <- Accounts.get_user_by_session_token(user_token),
          do: user
   end
-
 end

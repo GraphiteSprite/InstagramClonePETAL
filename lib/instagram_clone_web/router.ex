@@ -7,7 +7,7 @@ defmodule InstagramCloneWeb.Router do
     plug :accepts, ["html"]
     plug :fetch_session
     plug :fetch_live_flash
-    plug :put_root_layout, {InstagramCloneWeb.LayoutView, :root}
+    plug :put_root_layout, html: {InstagramCloneWeb.Layouts, :root}
     plug :protect_from_forgery
     plug :put_secure_browser_headers
     plug :fetch_current_user
@@ -64,7 +64,14 @@ defmodule InstagramCloneWeb.Router do
   scope "/", InstagramCloneWeb do
     pipe_through [:browser, :require_authenticated_user]
 
+    get "/users/settings", UserSettingsController, :edit
+    put "/users/settings", UserSettingsController, :update
     get "/users/settings/confirm_email/:token", UserSettingsController, :confirm_email
+  end
+
+  scope "/", InstagramCloneWeb do
+    pipe_through [:browser, :require_authenticated_user]
+
     live "/accounts/edit", UserLive.Settings
     live "/accounts/password/change", UserLive.PassSettings
     live "/:username/following", UserLive.Profile, :following
